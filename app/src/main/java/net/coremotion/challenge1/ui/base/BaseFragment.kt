@@ -1,10 +1,10 @@
 package net.coremotion.challenge1.ui.base
 
-import android.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
@@ -25,11 +25,11 @@ abstract class BaseFragment<BD : ViewBinding>(private val inflate: Inflate<BD>) 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        start()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        start()
         _binding = null
     }
 

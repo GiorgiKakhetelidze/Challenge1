@@ -31,6 +31,9 @@ class UsersAdapter() : PagingDataAdapter<Users.Data, UsersAdapter.UserViewHolder
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
         private var user: Users.Data? = null
         fun onBind() {
+            binding.root.setOnClickListener {
+
+            }
             this.user = getItem(bindingAdapterPosition)
             binding.profileImage.setImage(user?.avatar)
             binding.tvEmail.text = user?.email
@@ -41,6 +44,12 @@ class UsersAdapter() : PagingDataAdapter<Users.Data, UsersAdapter.UserViewHolder
         private fun setListeners() {
             binding.root.setOnClickListener(this)
         }
+
+        override fun onClick(v: View?) {
+            userItemOnClick?.invoke(user?.id!!)
+        }
+
+
     }
 }
 

@@ -43,9 +43,12 @@ class UsersFragment : BaseFragment<UsersFragmentBinding>(UsersFragmentBinding::i
     }
 
     private fun openUserDetail(userId: Int) {
-        UsersFragmentDirections.actionNewsFragmentToUserDetailFragment(
-            userId
+        findNavController().navigate(
+            UsersFragmentDirections.actionNewsFragmentToUserDetailFragment(
+                userId
+            )
         )
+
     }
 
     private fun setObservers() {

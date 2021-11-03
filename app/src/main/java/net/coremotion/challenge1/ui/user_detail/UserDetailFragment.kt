@@ -1,7 +1,7 @@
 package net.coremotion.challenge1.ui.user_detail
 
-import android.util.Log.d
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,16 +13,14 @@ import net.coremotion.challenge1.extensions.setImage
 import net.coremotion.challenge1.ui.base.BaseFragment
 
 @AndroidEntryPoint
-class UserDetailFragment :
-    BaseFragment<FragmentUserDetailBinding>(FragmentUserDetailBinding::inflate) {
+class UserDetailFragment : BaseFragment<FragmentUserDetailBinding>(FragmentUserDetailBinding::inflate) {
 
-    private val viewModel: UserDetailViewModel by viewModels()
+    private val viewModel by viewModels<UserDetailViewModel>()
     private val args: UserDetailFragmentArgs by navArgs()
 
-
     override fun start() {
-        observes()
         viewModel.getUserDetail(args.userId)
+        observes()
         setListeners()
     }
 
@@ -33,22 +31,23 @@ class UserDetailFragment :
     }
 
     private fun observes() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.userDetailFlow.collect {
-                when (it.status) {
-                    Resource.Status.SUCCESS -> {
-                        binding.swipeRefresh.isRefreshing = false
-                        binding.tvName.text = it.data?.data?.firstName.plus(" ").plus(it.data?.data?.lastName)
-                        binding.profileImage.setImage(it.data?.data?.avatar)
-                    }
-                    Resource.Status.ERROR -> {
-                        binding.swipeRefresh.isRefreshing = false
-                    }
-                    Resource.Status.LOADING -> {
-                        binding.swipeRefresh.isRefreshing = true
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.userDetailFlow
+                    .collect {
+                    when (it.status) {
+                        Resource.Status.SUCCESS -> {
+                            binding.swipeRefresh.isRefreshing = false
+                            binding.tvName.text = it.data?.data?.firstName.plus(" ").plus(it.data?.data?.lastName)
+                            binding.profileImage.setImage(it.data?.data?.avatar)
+                        }
+                        Resource.Status.ERROR -> {
+                            binding.swipeRefresh.isRefreshing = false
+                        }
+                        Resource.Status.LOADING -> {
+                            binding.swipeRefresh.isRefreshing = true
+                        }
                     }
                 }
-            }
         }
     }
 

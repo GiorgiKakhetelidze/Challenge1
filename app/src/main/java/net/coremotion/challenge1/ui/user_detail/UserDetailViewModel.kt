@@ -28,4 +28,5 @@ class UserDetailViewModel @Inject constructor(
             }
         }
     }
+
 }
